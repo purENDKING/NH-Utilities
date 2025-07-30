@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -30,27 +31,11 @@ public class EnhanceExUHealingAxe_Mixin {
             .addStats(20, 5.0F);
     }
 
-    @Inject(
-        method = "hitEntity(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/entity/EntityLivingBase;)Z",
-        at = @At("RETURN"),
-        remap = true)
-    private void nhu$healOnHit(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker,
-        CallbackInfoReturnable<Boolean> cir) {
-        // 只有玩家才触发生命转移效果
-        if (!(attacker instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) attacker;
-
-        // 基础转移生命值（2 心）
-        final float baseTransfer = 2.0F;
-
-        if (target.isEntityUndead()) {
-            // 对亡灵造成 4 倍伤害，玩家承受 baseTransfer 点伤害
-            player.attackEntityFrom(DamageSource.magic, baseTransfer);
-            target.attackEntityFrom(DamageSource.causePlayerDamage(player), baseTransfer * 4.0F);
-        } else {
-            // 对活体生物：玩家承受 baseTransfer 点伤害，目标回复 baseTransfer*1.1 点生命
-            player.attackEntityFrom(DamageSource.magic, baseTransfer);
-            target.heal(baseTransfer * 4.0F);
-        }
+    @Redirect(
+        method = "onLeftClickEntity(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/entity/Entity;)Z",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;getHealth()F", ordinal = 2)
+    )
+    private float redirectHealthToMax(EntityLivingBase living) {
+        return living.getMaxHealth();
     }
 }
