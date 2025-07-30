@@ -45,11 +45,11 @@ public class EnhanceExUHealingAxe_Mixin {
 
         if (target.isEntityUndead()) {
             // 对亡灵造成 4 倍伤害，玩家承受 baseTransfer 点伤害
-            player.attackEntityFrom(DamageSource.GENERIC, baseTransfer);
+            player.attackEntityFrom(DamageSource.magic, baseTransfer);
             target.attackEntityFrom(DamageSource.causePlayerDamage(player), baseTransfer * 4.0F);
         } else {
             // 对活体生物：玩家承受 baseTransfer 点伤害，目标回复 baseTransfer*1.1 点生命
-            player.attackEntityFrom(DamageSource.GENERIC, baseTransfer);
+            player.attackEntityFrom(DamageSource.magic, baseTransfer);
             target.heal(baseTransfer * 4.0F);
         }
     }
