@@ -30,9 +30,10 @@ public class EnhanceExUHealingAxe_Mixin {
     }
 
     @Redirect(
-        method = "onLeftClickEntity(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/entity/Entity;)Z",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;getHealth()F", ordinal = 2))
-    private float redirectHealthToMax(EntityLivingBase living) {
-        return living.getMaxHealth();
+        method = "onLeftClickEntity",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLiving;getHealth()F", ordinal = 2))
+    private float nhu$redirectGetHealth(EntityLiving instance) {
+        return instance.getMaxHealth();
     }
+
 }
