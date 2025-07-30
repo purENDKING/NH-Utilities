@@ -3,8 +3,8 @@ package com.xir.NHUtilities.mixins.late.ExtraUtilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,12 +34,8 @@ public class EnhanceExUHealingAxe_Mixin {
         method = "hitEntity(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/entity/EntityLivingBase;)Z",
         at = @At("RETURN"),
         remap = true)
-    private void nhu$healOnHit(
-        ItemStack stack,
-        EntityLivingBase target,
-        EntityLivingBase attacker,
-        CallbackInfoReturnable<Boolean> cir
-    ) {
+    private void nhu$healOnHit(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker,
+        CallbackInfoReturnable<Boolean> cir) {
         // 只有玩家才触发生命转移效果
         if (!(attacker instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) attacker;
